@@ -1,37 +1,16 @@
-go-messaging-system
-├── cmd
-│   └── server
-│       └── main.go
-├── internal
-│   ├── app
-│   │   └── server.go
-│   ├── config
-│   │   └── config.go
-│   ├── consumer
-│   │   └── manager.go
-│   ├── database
-│   │   ├── migrations
-│   │   │   └── schema.sql
-│   │   └── postgres.go
-│   ├── messaging
-│   │   ├── publisher.go
-│   │   ├── consumer.go
-│   │   └── rabbitmq.go
-│   ├── models
-│   │   ├── message.go
-│   │   └── tenant.go
-│   ├── repository
-│   │   ├── message.go
-│   │   └── tenant.go
-│   └── service
-│       ├── message.go
-│       └── tenant.go
-├── pkg
-│   └── utils
-│       └── common.go
-├── go.mod
-├── go.sum
-├── Dockerfile
-├── docker-compose.yml
-├── Makefile
-└── README.md
+FROM golang:1.21-alpine
+
+WORKDIR /app
+
+# Copy go.mod and go.sum first to leverage Docker cache
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy the rest of the application
+COPY . .
+
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/server
+
+# Run the application
+CMD ["./main"]
