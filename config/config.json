@@ -1,0 +1,5 @@
+{
+    "database_url": "postgres://user:password@localhost:5432/messaging_system?sslmode=disable",
+    "rabbitmq_url": "amqp://user:password@localhost:5672/",
+    "concurrency": 3
+}
